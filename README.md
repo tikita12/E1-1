@@ -24,8 +24,8 @@
 - [x] 바인드 마운트로 파일 변경 반영
 - [x] Docker 볼륨의 데이터 보존 확인
 - [x] Git 사용자 정보와 기본 브랜치 확인
-- [ ] GitHub 저장소 생성 및 업로드
-- [ ] VS Code와 GitHub 연동 증거 추가
+- [x] GitHub 저장소 생성 및 업로드
+- [x] VS Code와 GitHub 연동 완료
 
 ## Docker 기본 확인
 
@@ -95,7 +95,7 @@ git config --global init.defaultBranch
 git init -b main
 git status
 
-이름과 이메일이 설정돼 있었고, 기본 브랜치는 main이었다. 현재 로컬 저장소를 만들었으며, GitHub 업로드는 완료 후 기록한다.
+이름과 이메일이 설정돼 있었고, 기본 브랜치는 main이었다. 로컬 저장소를 만들고 GitHub 저장소에 업로드했다.
 
 ## 트러블슈팅
 
@@ -115,6 +115,8 @@ git status
 
 ## GitHub 제출
 
-- GitHub 저장소: 미완료
-- VS Code GitHub 연동 증거: 미완료
-- 제출 전 저장소 링크와 연동 캡처를 추가한다.
+- GitHub 저장소: 완료 (`https://github.com/tikita12/E1-1`, `main` 브랜치 업로드 확인)
+- VS Code와 GitHub 연동: 완료 (저장소 `origin`이 GitHub 저장소를 가리키는 것 확인)
+- VS Code와 GitHub 연동 화면:
+
+  ![VS Code와 GitHub 연동 화면](docs/screenshots/vscode-github-integration.png)
