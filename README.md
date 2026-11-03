@@ -168,6 +168,8 @@ e2997fda17a9   nginx:alpine      "/docker-entrypoint.…"   38 minutes ago      
 1004abfc7dda   mission-web:1.0   "/docker-entrypoint.…"   39 minutes ago       Up 39 minutes                   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   mission-web-container
 ```
 
+이미지는 컨테이너를 만드는 데 쓰는 실행 파일 묶음이고, 컨테이너는 그 이미지로 만든 실행 단위다. 실제 목록에서 `mission-web:1.0`은 이미지이며, 이 이미지로 실행한 `mission-web-container`는 컨테이너다. `hello-world` 이미지는 목록에 남아 있지만, 실행한 컨테이너 `brave_einstein`은 메시지를 출력한 뒤 `Exited (0)` 상태가 됐다.
+
 hello-world 출력에서 Hello from Docker!를 확인했다. Ubuntu 컨테이너에서는 ls와 echo를 실행했다. docker exec로 연 Bash에서 exit한 뒤에도 컨테이너가 계속 실행되는 것을 확인했다.
 
 ## 웹 서버 이미지와 포트 연결
