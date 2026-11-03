@@ -220,7 +220,7 @@ docker run -d --name mission-web-container -p 8080:80 mission-web:1.0
  => => unpacking to docker.io/library/mission-web:1.0                                             0.1s
 ```
 
-브라우저에서 http://localhost:8080으로 접속해 페이지를 확인했다. 호스트의 8080 포트 요청이 컨테이너의 NGINX 80 포트로 전달된다.
+브라우저에서 http://localhost:8080으로 접속해 페이지를 확인했다. `-p 8080:80`은 내 PC의 8080 포트를 컨테이너의 80 포트에 연결한다. 컨테이너는 독립된 네트워크 공간을 쓰므로 이 연결을 지정해야 내 PC에서 컨테이너의 NGINX에 접속할 수 있다. 실제 `docker ps -a` 출력의 `0.0.0.0:8080->80/tcp`가 연결된 포트를 보여준다. 8081 컨테이너도 같은 방식으로 내 PC의 8081 포트를 컨테이너의 80 포트에 연결했다.
 
 Windows 호스트에서 확인한 8080 포트의 실제 HTTP 응답:
 
