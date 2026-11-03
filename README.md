@@ -514,6 +514,67 @@ Content-Type: text/html
 
 Compose는 실행 설정을 YAML 파일에 보관하고, `docker compose up -d`로 그 설정을 실행한다. `build`는 이미지를 만들고, `ports`는 호스트와 컨테이너 포트를 연결한다.
 
+## 보너스: Docker Compose 멀티 컨테이너와 운영
+
+`compose-multi.yaml`은 웹 서버와 통신 확인용 BusyBox 보조 서비스를 함께 실행한다. Compose가 두 서비스를 같은 기본 네트워크에 연결한다.
+
+```powershell
+docker compose -f compose-multi.yaml config
+docker compose -f compose-multi.yaml up -d
+docker compose -f compose-multi.yaml ps
+docker compose -f compose-multi.yaml exec helper wget -qO- http://web
+docker compose -f compose-multi.yaml logs
+docker compose -f compose-multi.yaml down
+```
+
+실행 후 두 서비스가 모두 `Up` 상태였고, `helper`에서 `http://web`을 요청해 다음 응답을 받았다. 서비스 이름 `web`으로 같은 네트워크의 컨테이너를 찾을 수 있음을 확인했다.
+
+```text
+<h1>bind mount restored!</h1>
+```
+
+로그에서 NGINX의 정상 시작과 HTTP 200 응답도 확인했다. `down` 실행 후 두 컨테이너와 Compose 네트워크가 제거됐다.
+
+## 보너스: Compose 환경 변수
+
+`compose-env.yaml`에서 `APP_MODE` 환경 변수를 `practice`로 지정하고 NGINX 설정 템플릿에서 응답 헤더에 표시했다. 호스트의 8084 포트를 컨테이너의 80 포트에 연결했다.
+
+```powershell
+docker compose -f compose-env.yaml config
+docker compose -f compose-env.yaml up -d
+curl.exe -i http://localhost:8084
+```
+
+실제 HTTP 응답에서 `200 OK`와 환경 변수 값이 들어간 헤더를 확인했다.
+
+```http
+HTTP/1.1 200 OK
+X-App-Mode: practice
+
+<h1>bind mount restored!</h1>
+```
+
+## 보너스: GitHub SSH 연결
+
+ED25519 키 쌍을 만들고 공개 키를 GitHub에 등록했다. 개인 키는 저장소에 넣지 않았다. SSH 인증 명령과 실제 응답:
+
+```powershell
+ssh -T git@github.com
+```
+
+```text
+Hi tikita12! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+`origin`을 SSH 주소로 바꾸고 실제 원격 주소를 확인했다.
+
+```text
+origin  git@github.com:tikita12/E1-1.git (fetch)
+origin  git@github.com:tikita12/E1-1.git (push)
+```
+
+이제 GitHub로 push할 때 이 SSH 연결을 사용할 수 있다.
+
 ## GitHub 제출
 
 - GitHub 저장소: 완료 (`https://github.com/tikita12/E1-1`, `main` 브랜치 업로드 확인)

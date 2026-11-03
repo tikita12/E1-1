@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8083:80"
+
+  helper:
+    image: busybox:latest
+    command: ["sh", "-c", "while true; do sleep 3600; done"]

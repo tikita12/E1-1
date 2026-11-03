@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8084:80"
+    environment:
+      APP_MODE: "practice"
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
