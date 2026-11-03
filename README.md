@@ -109,8 +109,43 @@ docker --version
 Docker version 29.9.2, build a82e528
 ```
 
+`docker version`에서 확인한 Client와 Server 출력:
+
 ```powershell
 docker version
+```
+
+```text
+Client:
+ Version:           29.9.2
+ API version:       1.56
+ Go version:        go1.26.10
+ Git commit:        a82e528
+ Built:             Tue Oct 20 19:44:07 2026
+ OS/Arch:           windows/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.97.0 (244584)
+ Engine:
+  Version:          29.9.2
+  API version:      1.56 (minimum version 1.40)
+  Go version:       go1.26.10
+  Git commit:       0367cbe
+  Built:            Tue Oct 20 18:45:02 2026
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v2.4.2
+  GitCommit:        b7a25261e029d68978bbf290df0a62fc819b3c51
+ runc:
+  Version:          1.5.2
+  GitCommit:        v1.5.2-0-g29dd3dc2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+```
+
+```powershell
 docker run hello-world
 docker images
 docker ps
@@ -171,6 +206,8 @@ e2997fda17a9   nginx:alpine      "/docker-entrypoint.…"   38 minutes ago      
 ```
 
 이미지는 컨테이너를 만드는 데 쓰는 실행 파일 묶음이고, 컨테이너는 그 이미지로 만든 실행 단위다. 실제 목록에서 `mission-web:1.0`은 이미지이며, 이 이미지로 실행한 `mission-web-container`는 컨테이너다. `hello-world` 이미지는 목록에 남아 있지만, 실행한 컨테이너 `brave_einstein`은 메시지를 출력한 뒤 `Exited (0)` 상태가 됐다.
+
+`docker build`는 Dockerfile과 `site` 파일로 이미지를 만들고, `docker run`은 그 이미지에서 컨테이너를 만든다. `site`를 고쳐 이미지를 다시 빌드해도 이미 실행 중인 8080 컨테이너의 내용은 자동으로 바뀌지 않았다. 반면 바인드 마운트로 연결한 8081 컨테이너에는 파일 수정이 바로 반영됐다.
 
 hello-world 출력에서 Hello from Docker!를 확인했다. Ubuntu 컨테이너에서는 ls와 echo를 실행했다. docker exec로 연 Bash에서 exit한 뒤에도 컨테이너가 계속 실행되는 것을 확인했다.
 
@@ -252,6 +289,8 @@ Accept-Ranges: bytes
 
 호스트의 `site` 폴더를 컨테이너의 NGINX 웹 폴더에 연결했다. `source=C:\Users\bshin\mission-web\site`는 이 PC에서 실제 웹페이지 파일이 있는 폴더이고, `target=/usr/share/nginx/html`은 NGINX가 웹페이지를 읽는 컨테이너 안의 폴더다. 다른 PC에서 실행할 때는 `source`를 그 PC의 실제 프로젝트 경로로 바꿔야 한다. `readonly`는 컨테이너에서 원본 폴더를 수정하지 못하게 한다.
 
+경로를 고를 때 기준은 다음과 같다. `docker build ... .`의 `.`은 현재 작업 폴더를 뜻하고, Dockerfile의 `COPY site/ ...`에서 `site/`는 그 빌드 폴더를 기준으로 찾는 상대경로다. 바인드 마운트의 `source=C:\Users\bshin\mission-web\site`는 어느 폴더를 연결할지 정확히 지정해야 하므로 이 PC의 절대경로를 썼다. `target=/usr/share/nginx/html`은 컨테이너 안에서 NGINX가 읽는 위치를 가리키는 절대경로다.
+
 ```powershell
 docker run -d --name mission-web-bind -p 8081:80 --mount "type=bind,source=C:\Users\bshin\mission-web\site,target=/usr/share/nginx/html,readonly" nginx:alpine
 ```
@@ -300,7 +339,23 @@ docker exec volume-test2 cat /data/hello.txt
 
 새 컨테이너에서 saved-in-volume이 출력됐다. 컨테이너를 지워도 mission-data 볼륨의 파일은 남아 있음을 확인했다.
 
+재설치 후에도 볼륨 목록과 파일 내용을 다시 확인했다.
+
+```powershell
+docker volume ls --format '{{.Name}}'
+docker run --rm -v mission-data:/data:ro ubuntu cat /data/hello.txt
+```
+
+두 명령의 실제 출력은 차례대로 다음과 같다.
+
+```text
+mission-data
+saved-in-volume
+```
+
 바인드 마운트는 내 PC의 `site` 폴더를 컨테이너에 직접 연결한다. 그래서 PC에서 `site/index.html`을 고치자 8081 페이지에 바로 반영됐다. 볼륨은 Docker가 관리하는 저장 공간이다. `mission-data`를 새 컨테이너에 다시 연결하자 `hello.txt`의 `saved-in-volume`이 남아 있었다. 웹페이지 원본을 PC에서 수정할 때는 바인드 마운트를, 컨테이너를 바꿔도 데이터를 보관할 때는 볼륨을 사용했다.
+
+바인드 마운트는 PC에서 파일을 바로 열고 고치기 쉽지만, 그 파일과 경로를 PC에서 관리해야 한다. 볼륨은 Docker가 데이터를 관리해 컨테이너를 바꿔도 다시 연결하기 쉽지만, PC의 일반 폴더처럼 직접 편집하기는 불편하다. 두 방식의 속도는 이 과제에서 측정하지 않았다.
 
 ## Git 설정
 
@@ -316,6 +371,16 @@ git status
 ```
 
 이름과 이메일이 설정돼 있었고, 기본 브랜치는 main이었다. 로컬 저장소를 만들고 GitHub 저장소에 업로드했다.
+
+기본 브랜치 설정을 다시 확인한 실제 출력:
+
+```powershell
+git config --global --get init.defaultBranch
+```
+
+```text
+main
+```
 
 원격 저장소 주소를 확인한 실제 출력:
 
@@ -334,7 +399,13 @@ origin  https://github.com/tikita12/E1-1.git (push)
 
 ### 포트가 이미 사용 중일 때 확인 방법
 
-이 항목은 실제 발생 기록이 아닌 문제 해결 방법이다. `-p 8080:80` 실행 시 내 PC의 8080 포트를 다른 프로그램이나 컨테이너가 사용 중이라면 같은 포트를 다시 연결할 수 없다. 먼저 `docker ps`의 `PORTS` 열에서 8080을 쓰는 컨테이너가 있는지 확인한다. 기존 컨테이너를 유지해야 한다면, 사용하지 않는 호스트 포트를 골라 `-p 8082:80`처럼 **왼쪽 숫자만** 바꿔 실행한다. 이때 접속 주소도 `http://localhost:8082`가 된다. 8082는 설명을 위한 예시이며 이 과제에서 실행해 확인한 포트는 8080과 8081이다.
+이 항목은 실제 발생 기록이 아닌 문제 해결 방법이다. `-p 8080:80` 실행 시 내 PC의 8080 포트를 다른 프로그램이나 컨테이너가 사용 중이라면 같은 포트를 다시 연결할 수 없다.
+
+1. `docker ps`의 `PORTS` 열에서 8080을 쓰는 컨테이너가 있는지 확인한다.
+2. 없으면 PowerShell에서 `Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue`로 8080 포트를 쓰는 Windows 프로세스의 `OwningProcess` 번호를 확인하고, 그 번호를 `Get-Process -Id <번호>`에 넣어 프로그램 이름을 확인한다.
+3. 해당 프로그램이나 컨테이너가 필요 없다면 프로그램을 닫거나 `docker stop <컨테이너이름>`으로 컨테이너를 멈춘 뒤 다시 확인한다. 계속 필요하다면 사용하지 않는 호스트 포트를 골라 `-p 8082:80`처럼 **왼쪽 숫자만** 바꾼다. 이때 접속 주소도 `http://localhost:8082`가 된다.
+
+`8082`와 위 진단 명령은 설명을 위한 예시이며, 이 과제에서 실행해 확인한 포트는 8080과 8081이다.
 
 ### WSL에 Ubuntu 배포판이 표시되지 않음
 
@@ -349,6 +420,19 @@ origin  https://github.com/tikita12/E1-1.git (push)
 - 확인한 원인: `Docker Desktop.exe.stderr.log`에 화면 프로그램이 설치 폴더 `C:\Users\bshin\AppData\Local\Programs\DockerDesktop\frontend`를 읽지 못한다는 오류가 기록됐다. 실제 폴더 권한에도 특정 AppContainer SID는 있었지만 `ALL APPLICATION PACKAGES`의 읽기·실행 권한은 없었다.
 - 시도한 조치: Docker Desktop을 삭제 후 재설치하고 화면 가속도 꺼봤지만 같은 오류가 계속됐다.
 - 해결: 기존 폴더 권한을 백업한 뒤, 해당 `frontend` 폴더와 하위 파일·폴더에 `ALL APPLICATION PACKAGES` (`S-1-15-2-1`)의 읽기·실행 권한을 추가하고 Docker Desktop을 재시작했다.
+
+당시 `Docker Desktop.exe.stderr.log`에서 확인한 원본 오류 한 줄:
+
+```text
+[2026-11-02T16:14:52.111387100Z] [15972:1103/011452.111:FATAL:electron\shell\browser\win\install_dir_access.cc:52] Sandboxed processes cannot read C:\Users\bshin\AppData\Local\Programs\DockerDesktop\frontend: its ACL has an entry for an AppContainer package SID but none for ALL APPLICATION PACKAGES, so Windows denies the sandbox token access. Grant it with: icacls "C:\Users\bshin\AppData\Local\Programs\DockerDesktop\frontend" /grant *S-1-15-2-1:(OI)(CI)(RX)
+```
+
+권한 수정 후 `icacls`로 다시 확인한 관련 출력:
+
+```text
+C:\Users\bshin\AppData\Local\Programs\DockerDesktop\frontend APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES:(OI)(CI)(RX)
+Successfully processed 1 files; Failed processing 0 files
+```
 
 이 PC에서 적용한 권한 수정 명령:
 
