@@ -466,6 +466,54 @@ docker run --rm -v mission-data:/data:ro ubuntu cat /data/hello.txt
 - `site` 폴더를 연결한 `mission-web-bind` 컨테이너를 다시 실행하고, `http://localhost:8081` 접속을 확인했다.
 - `site/index.html`의 문구를 `bind mount works!`에서 `bind mount restored!`로 바꾸고 저장했다. 이미지 재빌드 없이 8081 페이지를 새로고침해 변경된 문구가 표시되는 것을 확인했다.
 
+## 보너스: Docker Compose 단일 서비스
+
+`compose.yaml`에 현재 폴더의 Dockerfile 빌드와 포트 연결을 적고 Compose로 웹 서버 하나를 실행했다. 기존 컨테이너가 사용하는 8080·8081 포트를 피하려고 8082를 사용했다.
+
+```yaml
+services:
+  web:
+    build: .
+    ports:
+      - "8082:80"
+```
+
+설정 확인과 실행 명령:
+
+```powershell
+docker compose config
+docker compose up -d
+docker compose ps
+curl.exe -i http://localhost:8082
+```
+
+`docker compose config`에서 빌드 경로가 과제 폴더, 포트가 `8082 → 80`으로 표시됐다. `docker compose up -d`의 실제 결과는 이미지 빌드와 컨테이너 시작 성공이었다.
+
+```text
+✔ Image mission-web-web       Built
+✔ Network mission-web_default Created
+✔ Container mission-web-web-1 Started
+```
+
+실행 상태 확인:
+
+```text
+NAME                IMAGE             COMMAND                   SERVICE   CREATED          STATUS          PORTS
+mission-web-web-1   mission-web-web   "/docker-entrypoint.…"   web       35 seconds ago   Up 35 seconds   0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
+```
+
+웹 접속 결과:
+
+```http
+HTTP/1.1 200 OK
+Server: nginx/1.31.8
+Content-Type: text/html
+
+<h1>bind mount restored!</h1>
+```
+
+Compose는 실행 설정을 YAML 파일에 보관하고, `docker compose up -d`로 그 설정을 실행한다. `build`는 이미지를 만들고, `ports`는 호스트와 컨테이너 포트를 연결한다.
+
 ## GitHub 제출
 
 - GitHub 저장소: 완료 (`https://github.com/tikita12/E1-1`, `main` 브랜치 업로드 확인)
