@@ -304,12 +304,16 @@ docker exec volume-test2 cat /data/hello.txt
 
 ## Git 설정
 
+실습 때 사용한 Git 명령:
+
+```powershell
 git --version
 git config --global --get user.name
 git config --global --get user.email
 git config --global init.defaultBranch
 git init -b main
 git status
+```
 
 이름과 이메일이 설정돼 있었고, 기본 브랜치는 main이었다. 로컬 저장소를 만들고 GitHub 저장소에 업로드했다.
 
@@ -327,6 +331,10 @@ origin  https://github.com/tikita12/E1-1.git (push)
 `fetch`는 GitHub에서 가져올 때, `push`는 GitHub로 올릴 때 사용하는 주소다.
 
 ## 트러블슈팅
+
+### 포트가 이미 사용 중일 때 확인 방법
+
+이 항목은 실제 발생 기록이 아닌 문제 해결 방법이다. `-p 8080:80` 실행 시 내 PC의 8080 포트를 다른 프로그램이나 컨테이너가 사용 중이라면 같은 포트를 다시 연결할 수 없다. 먼저 `docker ps`의 `PORTS` 열에서 8080을 쓰는 컨테이너가 있는지 확인한다. 기존 컨테이너를 유지해야 한다면, 사용하지 않는 호스트 포트를 골라 `-p 8082:80`처럼 **왼쪽 숫자만** 바꿔 실행한다. 이때 접속 주소도 `http://localhost:8082`가 된다. 8082는 설명을 위한 예시이며 이 과제에서 실행해 확인한 포트는 8080과 8081이다.
 
 ### WSL에 Ubuntu 배포판이 표시되지 않음
 
