@@ -183,6 +183,12 @@ COPY site/ /usr/share/nginx/html/
 
 `FROM`은 사용할 기본 이미지가 `nginx:alpine`임을 뜻한다. `COPY`는 이 폴더의 `site/` 내용을 이미지 안의 `/usr/share/nginx/html/`에 복사한다.
 
+현재 `site/index.html` 내용 (`Get-Content site/index.html`로 확인):
+
+```html
+<h1>bind mount restored!</h1>
+```
+
 빌드와 실행 명령:
 
 docker build -t mission-web:1.0 .
@@ -266,7 +272,7 @@ Accept-Ranges: bytes
 <h1>bind mount restored!</h1>
 ```
 
-호스트의 site/index.html 내용을 Bind mount works!로 바꾼 뒤 http://localhost:8081을 새로고침했다. 이미지를 다시 빌드하지 않아도 변경된 페이지가 표시됐다.
+호스트의 `site/index.html` 문구를 `bind mount works!`에서 `bind mount restored!`로 바꾼 뒤 `http://localhost:8081`을 새로고침했다. 이미지를 다시 빌드하지 않아도 변경된 페이지가 표시됐다.
 
 ## Docker 볼륨 데이터 보존
 
