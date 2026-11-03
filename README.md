@@ -195,8 +195,10 @@ COPY site/ /usr/share/nginx/html/
 
 빌드와 실행 명령:
 
+```powershell
 docker build -t mission-web:1.0 .
 docker run -d --name mission-web-container -p 8080:80 mission-web:1.0
+```
 
 이미지를 다시 빌드하며 확인한 실제 출력 (`CACHED`는 기존 기본 이미지 재사용을 뜻한다):
 
@@ -246,15 +248,13 @@ Accept-Ranges: bytes
 
 8080 컨테이너는 앞서 빌드한 이미지로 실행 중이므로, 새 빌드 후에도 기존 컨테이너의 페이지 문구가 그대로 표시됐다.
 
-Docker 정보 확인
-
-웹 페이지와 포트 접속
-
 ## 바인드 마운트
 
-호스트의 site 폴더를 컨테이너의 NGINX 웹 폴더에 연결했다. 호스트 경로는 내 PC의 프로젝트 위치에 맞게 바꿔야 한다.
+호스트의 `site` 폴더를 컨테이너의 NGINX 웹 폴더에 연결했다. `source=C:\Users\bshin\mission-web\site`는 이 PC에서 실제 웹페이지 파일이 있는 폴더이고, `target=/usr/share/nginx/html`은 NGINX가 웹페이지를 읽는 컨테이너 안의 폴더다. 다른 PC에서 실행할 때는 `source`를 그 PC의 실제 프로젝트 경로로 바꿔야 한다. `readonly`는 컨테이너에서 원본 폴더를 수정하지 못하게 한다.
 
+```powershell
 docker run -d --name mission-web-bind -p 8081:80 --mount "type=bind,source=C:\Users\bshin\mission-web\site,target=/usr/share/nginx/html,readonly" nginx:alpine
+```
 
 Windows 호스트에서 확인한 8081 포트의 실제 HTTP 응답:
 
@@ -282,17 +282,21 @@ Accept-Ranges: bytes
 
 볼륨을 만들고 컨테이너에 연결했다.
 
+```powershell
 docker volume create mission-data
 docker run -d --name volume-test1 -v mission-data:/data ubuntu sleep infinity
 docker exec volume-test1 sh -c "echo saved-in-volume > /data/hello.txt"
 docker exec volume-test1 cat /data/hello.txt
+```
 
 첫 컨테이너를 삭제한 뒤 같은 볼륨을 새 컨테이너에 연결했다.
 
+```powershell
 docker rm -f volume-test1
 docker volume ls
 docker run -d --name volume-test2 -v mission-data:/data ubuntu sleep infinity
 docker exec volume-test2 cat /data/hello.txt
+```
 
 새 컨테이너에서 saved-in-volume이 출력됐다. 컨테이너를 지워도 mission-data 볼륨의 파일은 남아 있음을 확인했다.
 
