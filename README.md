@@ -294,6 +294,8 @@ docker exec volume-test2 cat /data/hello.txt
 
 새 컨테이너에서 saved-in-volume이 출력됐다. 컨테이너를 지워도 mission-data 볼륨의 파일은 남아 있음을 확인했다.
 
+바인드 마운트는 내 PC의 `site` 폴더를 컨테이너에 직접 연결한다. 그래서 PC에서 `site/index.html`을 고치자 8081 페이지에 바로 반영됐다. 볼륨은 Docker가 관리하는 저장 공간이다. `mission-data`를 새 컨테이너에 다시 연결하자 `hello.txt`의 `saved-in-volume`이 남아 있었다. 웹페이지 원본을 PC에서 수정할 때는 바인드 마운트를, 컨테이너를 바꿔도 데이터를 보관할 때는 볼륨을 사용했다.
+
 ## Git 설정
 
 git --version
