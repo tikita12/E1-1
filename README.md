@@ -22,6 +22,8 @@
 | WSL 환경·Git 설정·브랜치·원격 주소 | [WSL·Git](evidence/wsl-gi.png) |
 | 파일·폴더 생성·복사·이동·삭제 | [기본 조작](evidence/wsl-files.png) |
 | 디렉터리 권한 755 → 700 → 755 | [권한 변경](evidence/wsl-permission.png) |
+| hello-world 실행 | [첫 실행 확인](evidence/hello.png) |
+| 최신 이미지·컨테이너 목록 | [이미지](evidence/docker-images.png) · [컨테이너](evidence/docker-containers.png) |
 | Dockerfile 빌드 완료·이미지 목록 | [빌드](evidence/wsl-build.png) |
 | 커스텀 이미지 실행·HTTP 200 | [실행·접속](evidence/wsl-web.png) |
 | 주소창과 웹페이지 | [브라우저](evidence/wsl-browser.png) |
@@ -441,6 +443,8 @@ practical_torvalds    hello-world   Exited (0) 52 minutes ago
 sweet_chatterjee      hello-world   Exited (0) 53 minutes ago
 ```
 
+`docker --version`은 Ubuntu에서 사용하는 Docker CLI의 버전을 보여준다. 이 명령만으로 엔진 연결 성공을 판단하지 않는다. `docker info`는 엔진에 정보를 요청하며, `--format`은 응답 중 `OSType`과 `ServerVersion`만 골라 출력한다. 실제 응답 `OSType=linux ServerVersion=29.9.2`로 Ubuntu 터미널에서 Linux 엔진에 접근할 수 있음을 확인했다. 이는 기존 Docker Desktop의 WSL integration을 사용한 결과이며 Ubuntu에 엔진을 별도로 설치했다는 의미는 아니다.
+
 `docker info`의 실제 응답에서 Linux 엔진 버전 29.9.2를 확인했다. `Up`은 실행 중, `Created`는 생성됐지만 아직 실행 중이 아닌 상태, `Exited (0)`은 종료 코드 0으로 종료된 상태다. 이 시점에는 호스트 8080·8082 포트가 사용 중이었다.
 
 ### Ubuntu 내부 명령과 운영 로그 보완 (2026-11-04)
@@ -519,6 +523,42 @@ bd81ef07c2a3   e1-ops-20261104150811   0.00%     3.27MiB / 15.25GiB   0.02%     
 
 `docker exec`는 실행 중인 컨테이너에 별도 프로세스를 실행한다. 이번 Bash가 `exit`한 뒤에도 메인 프로세스인 `sleep infinity`가 남아 `Up` 상태를 유지했다. `docker logs`는 컨테이너 메인 프로세스의 표준 출력·오류 로그를 확인하는 명령이다. 별도로 실행한 exec 명령의 `inside-ubuntu` 출력은 이번 logs 결과에 포함되지 않았다. `docker stats --no-stream`은 자원 사용량을 한 번 출력하며, 위 수치는 측정 시점에 따라 달라진다.
 
+### exec 대화형 Bash 실제 화면 보완
+
+Ubuntu 터미널에서 `ubuntu-practice`에 접속하려 했으나 컨테이너가 없어 오류가 났다. 같은 이름으로 `mkdir ubuntu-practice`를 실행하는 것은 호스트 폴더를 만드는 작업이며 Docker 컨테이너를 생성하지 않는다.
+
+```bash
+docker exec -it ubuntu-practice bash
+```
+
+```text
+Error response from daemon: No such container: ubuntu-practice
+```
+
+다음 명령으로 컨테이너를 만들고 메인 프로세스를 유지한 뒤 Bash를 추가 실행했다.
+
+```bash
+docker run -d --name ubuntu-practice ubuntu sleep infinity
+docker exec -it ubuntu-practice bash
+```
+
+생성 ID는 `15e5bf8eea586604b8ddfa7a6ae8f3261778698363655ba408dfb506d4b5289b`였다. 컨테이너 Bash에서 다음을 실행했다.
+
+```bash
+echo "hahaha"
+exit
+```
+
+`echo`에서 `hahaha`가 출력됐고 호스트로 돌아와 실행한 `docker ps`에서 `ubuntu-practice`가 `Up 58 seconds`인 것을 확인했다.
+
+```bash
+docker ps
+```
+
+![실제 exec 실습: No such container 오류, docker run으로 생성, Bash에서 echo와 exit 후 컨테이너 Up 유지 확인](evidence/exec예제.png)
+
+`exec`는 실행 중인 컨테이너에 추가 프로세스를 실행한다. `-i`는 표준 입력을 열어 두고 `-t`는 가상 터미널을 할당해 Bash를 대화형으로 사용할 수 있게 한다. 이번 `exit`는 추가 Bash만 종료했으며 메인 프로세스 `sleep infinity`가 남아 컨테이너는 유지됐다. 이 캡처 시점의 `ubuntu-practice`는 실행 중이며, 앞서 중지·삭제한 `e1-ops-20261104150811`과는 별도 컨테이너다.
+
 ### 실습 컨테이너 중지·삭제 확인 (2026-11-04)
 
 위 운영 실습에서 만든 컨테이너만 중지하고 삭제했다. 실제 명령·출력은 다음과 같다. 추적 접두사는 생략했다.
@@ -567,6 +607,36 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 `exec`로 실행한 Bash 종료 후에는 컨테이너가 `Up`으로 유지됐지만, `docker stop` 후에는 `exited`, `Running=false`로 바뀌었다. 중지된 컨테이너는 삭제 전까지 `docker ps -a`에 남았고, `docker rm` 후에는 해당 목록이 헤더만 출력됐다. 따라서 추가 프로세스 종료, 컨테이너 중지, 컨테이너 삭제를 구분해 확인했다.
 
 이번 중지 결과의 종료 코드는 실제로 `137`이었다. 이를 정상 종료 코드 `0`으로 기록하지 않는다. 제공된 로그만으로 종료 코드의 구체적인 원인은 단정하지 않으며, 이번에 확인한 사항은 실행 중지와 삭제 여부다.
+
+### WSL hello-world 실행과 최신 목록 실제 화면
+
+Ubuntu 터미널에서 `hello-world`를 실행해 실제 응답을 확인했다.
+
+```bash
+docker run hello-world
+```
+
+![실제 Ubuntu 터미널의 docker run hello-world 명령과 Hello from Docker 출력](evidence/hello.png)
+
+이미지와 컨테이너 목록을 다시 조회했다. 아래 캡처는 앞선 실습 기록과 촬영 시점이 다르며, 촬영용 웹 컨테이너를 삭제한 이후의 상태다.
+
+```bash
+docker images
+```
+
+![실제 이미지 목록: e1-proof:1.0, hello-world:latest, nginx:latest, ubuntu:latest](evidence/docker-images.png)
+
+직접 빌드한 `e1-proof:1.0` 이미지(ID `82ecee3c870b`)가 목록에 남아 있다. 기존 Windows 실습 당시의 `mission-web:1.0`은 이번 목록에 표시되지 않으므로 현재 존재한다고 설명하지 않는다. `e1-proof:1.0` 빌드나 촬영용 컨테이너 삭제가 기존 이미지의 삭제 원인이라고 단정하지 않는다.
+
+```bash
+docker ps -a
+```
+
+![실제 컨테이너 전체 목록: hello-world 세 개 Exited 0, nginx 두 개 Up 및 하나 Created](evidence/docker-containers.png)
+
+촬영 시점의 hello-world 컨테이너 세 개는 `Exited (0)`, NGINX 두 개는 `Up`, 하나는 `Created`였다. `friendly_merkle`는 호스트 8082, `xenodochial_almeida`는 호스트 8080을 컨테이너 80에 연결했다. `Created`는 생성됐지만 현재 실행 중이 아닌 상태다.
+
+`e1-proof:1.0`으로 실행했던 `e1-web-shot-153338`은 앞서 삭제했으므로 이 컨테이너 목록에는 없다. 이미지가 목록에 남아 있어도 그 이미지로 만든 컨테이너가 반드시 존재하거나 실행 중인 것은 아니다. 이 두 목록을 비교해 이미지와 컨테이너가 별도로 관리됨을 확인했다.
 
 ## 웹 서버 이미지와 포트 연결
 
