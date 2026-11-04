@@ -99,8 +99,7 @@
   <p style="margin-top:34px;font-size:18px;opacity:.8">발표자: 장보윤 · 저장소 github.com/tikita12/E1-1</p>
 </section>
 
-<!-- 2. 목차 -->
-<section class="slide" data-notes="발표는 크게 다섯 부분입니다. 왜 이 미션을 하는지, 터미널과 권한, Docker, 데이터 저장, 그리고 Git과 문제 해결 경험 순서로 말씀드리겠습니다.">
+<section class="slide" data-notes="미션 소개, 터미널과 권한, Docker, 데이터 연결, Git과 GitHub, 문제 해결, 보너스 실습과 회고 순서로 설명하겠습니다.">
   <span class="tag">목차</span>
   <h2>오늘 이야기할 순서</h2>
   <div class="row" style="flex-wrap:wrap;gap:18px">
@@ -114,7 +113,6 @@
   </div>
 </section>
 
-<!-- 3. 왜? -->
 <section class="slide" data-notes="개발자들 사이에서 유명한 말이 있습니다. '내 컴퓨터에서는 되는데요?' 친구 컴퓨터에서는 프로그램이 안 돌아가는 문제죠. 마치 내 집 부엌에서는 맛있게 되던 요리가, 친구 집에선 재료와 도구가 달라 망하는 것과 같습니다. 이 미션은 <b>누구 컴퓨터에서든 똑같이 돌아가는 작업실</b>을 만드는 것이 목표입니다.">
   <span class="tag">1. 미션 소개</span>
   <h2>"내 컴퓨터에서는 되는데요?" 😅</h2>
@@ -136,7 +134,6 @@
   <p style="margin-top:28px" class="sub">💡 개발은 코드를 쓰는 순간이 아니라, <b>환경을 준비하는 순간</b>부터 시작된다.</p>
 </section>
 
-<!-- 4. 세 가지 도구 -->
 <section class="slide" data-notes="이 작업실에는 세 가지 도구가 있습니다. 터미널은 마우스 대신 글자로 컴퓨터에게 명령하는 '대화창'이고, Docker는 프로그램을 통째로 담는 '도시락통', Git은 게임의 '세이브 포인트'처럼 작업 기록을 저장해 줍니다. GitHub는 그 세이브 파일을 올려두는 인터넷 보관함입니다.">
   <span class="tag">1. 미션 소개</span>
   <h2>작업실의 세 가지 핵심 도구</h2>
@@ -152,11 +149,10 @@
       <p class="small sub" style="margin-top:10px">비유: 게임 <b>세이브 포인트</b> + 클라우드</p></div>
   </div>
   <div class="card blue" style="margin-top:24px">
-    <p>🏫 제가 사용한 환경: <b>Windows</b> + <b>PowerShell</b> + <b>Ubuntu(WSL 2)</b> + <b>Docker Desktop 4.97.0</b> (Engine 29.9.2) + <b>Git 2.55.0</b></p>
+    <p>🏫 제가 사용한 환경: <b>Windows</b> + <b>PowerShell</b> + <b>Ubuntu(WSL 2)</b> + <b>Docker Desktop 4.97.0</b> (Engine 29.9.2) + <b>Git Windows 2.55.0 / WSL 2.53.0</b></p>
   </div>
 </section>
 
-<!-- 5. 폴더 구성 -->
 <section class="slide" data-notes="먼저 프로젝트 폴더를 정리했습니다. 책상 서랍을 용도별로 나누듯, 웹페이지 원본은 site, 설명서는 README, 증거 사진은 docs와 evidence에 넣었습니다. 평가자가 저장소 링크 하나만 보고도 모든 걸 찾을 수 있게 하려는 목적입니다.">
   <span class="tag">2. 터미널과 권한</span>
   <h2>작업실 정리: 서랍마다 이름표 붙이기 🗂️</h2>
@@ -182,8 +178,17 @@ README.md</span></pre>
   </div>
 </section>
 
-<!-- 6. 경로 -->
-<section class="slide" data-notes="터미널에서 파일 위치를 말할 때 두 가지 방법이 있습니다. 절대 경로는 '서울시 OO구 OO동 123번지'처럼 처음부터 끝까지 다 말하는 주소이고, 상대 경로는 '지금 있는 곳에서 옆 방'처럼 현재 위치 기준으로 말하는 방법입니다. 저는 Dockerfile 안에서는 상대 경로 site/를, 바인드 마운트에서는 정확한 폴더를 지정해야 해서 절대 경로를 썼습니다. <b>[보충]</b> 사실 이건 골라 쓰는 게 아니라 각 도구가 그것만 받아줘서예요. 바인드 마운트는 절대 경로만 받고(상대 경로를 주면 Docker가 거부), Dockerfile의 COPY는 프로젝트 폴더 기준 상대 경로로만 찾습니다. 한마디로 정확히 콕 집을 땐 절대 경로, 폴더를 옮겨도 따라오게 할 땐 상대 경로입니다.">
+<section class="slide" data-notes="기본 파일 조작은 WSL 2의 Linux 홈 폴더에서 zsh로 보완 실습했습니다. mktemp로 독립된 실습 폴더를 만들고, source와 archive 폴더를 생성했습니다. 빈 파일은 0바이트였고 숨김 파일도 목록에서 확인했습니다. hello.txt를 복사한 뒤 renamed.txt로 이름을 바꾸고 archive로 옮겨도 내용이 유지됐습니다. 마지막에는 복사본과 빈 archive 폴더를 삭제했습니다. 앞선 실습의 ls는 eza 별칭이었지만 이 실제 캡처에서는 command ls로 ls 자체를 실행했습니다. 실제 명령과 출력 전문의 발췌는 README에 기록했습니다.">
+  <span class="tag">2. 터미널과 권한 · 보완 실습</span>
+  <h2>파일 생성부터 복사·이동·삭제까지</h2>
+  <p class="small sub" style="margin-bottom:18px">2026-11-04 · WSL 2 / zsh · Linux 홈의 별도 실습 폴더</p>
+  <div class="row" style="align-items:center">
+    <div class="col" style="flex:1.25"><img class="shot" src="../evidence/wsl-files.png" alt="실제 터미널 기본 조작 명령과 파일 생성·복사·이동·삭제 결과" style="width:100%;max-height:420px;object-fit:contain;object-position:left center"></div>
+    <div class="col"><div class="card green"><h3>직접 확인한 결과</h3><p class="small">빈 파일: 0바이트<br>텍스트 파일: 18바이트<br>이동 후 내용: terminal practice<br>삭제 후: .hidden과 source 유지</p></div><p class="small sub" style="margin-top:16px">mkdir: 폴더 생성 · cp: 복사<br>mv: 이동·이름 변경 · cat: 내용 읽기<br>rm: 파일 삭제 · rmdir: 빈 폴더 삭제</p></div>
+  </div>
+</section>
+
+<section class="slide" data-notes="터미널에서 파일 위치를 말할 때 두 가지 방법이 있습니다. 절대 경로는 '서울시 OO구 OO동 123번지'처럼 처음부터 끝까지 다 말하는 주소이고, 상대 경로는 '지금 있는 곳에서 옆 방'처럼 현재 위치 기준으로 말하는 방법입니다. 저는 Dockerfile 안에서는 상대 경로 site/를, 바인드 마운트에서는 정확한 폴더를 지정해야 해서 절대 경로를 썼습니다. 이 실습의 바인드 마운트 source에는 절대 경로를 사용했습니다. Dockerfile의 COPY 원본은 빌드 컨텍스트를 기준으로 찾습니다. 경로를 옮겨 실행할 때는 각 명령의 기준 위치를 확인해야 합니다.">
   <span class="tag">2. 터미널과 권한</span>
   <h2>절대 경로 vs 상대 경로 🧭</h2>
   <div class="row">
@@ -206,7 +211,6 @@ docker build .      <span class="m"># . = 지금 폴더</span></pre>
   </div>
 </section>
 
-<!-- 7. 권한 -->
 <section class="slide" data-notes="리눅스에서는 파일마다 '누가 무엇을 할 수 있는지' 권한이 정해져 있습니다. 읽기는 4점, 쓰기는 2점, 실행은 1점이고, 주인·그룹·다른 사람 순서로 점수를 더해 세 자리 숫자를 만듭니다. 저는 hello.txt 파일에 chmod 600을 적용해, 일기장처럼 <b>나만 읽고 쓸 수 있게</b> 바꿨습니다. 변경 전후 결과를 ls -l로 확인했습니다.">
   <span class="tag">2. 터미널과 권한</span>
   <h2>파일 권한: "누가 내 일기장을 볼 수 있지?" 🔐</h2>
@@ -241,7 +245,17 @@ docker build .      <span class="m"># . = 지금 폴더</span></pre>
   </div>
 </section>
 
-<!-- 8. Docker 개념 -->
+<section class="slide" data-notes="파일에 이어 디렉터리 권한도 변경했습니다. shared 폴더는 처음에 755였고 chmod 700으로 소유자만 권한을 갖도록 바꾼 뒤 755로 되돌렸습니다. 각 단계에서 stat으로 문자와 숫자 권한을 함께 확인했습니다. 디렉터리의 x는 프로그램 실행이 아니라 폴더 진입과 내부 경로 탐색 권한입니다. r은 이름 목록을 읽는 권한이고, w와 x가 있으면 항목을 만들거나 지울 수 있습니다. 이번에는 권한 비트 변경을 검증했으며, 실제 다른 사용자의 접근에는 상위 폴더 권한도 영향을 줍니다. 일반 파일의 644는 소유자 읽기·쓰기, 나머지 읽기이고 실행 권한은 없습니다.">
+  <span class="tag">2. 터미널과 권한 · 보완 실습</span>
+  <h2>디렉터리 권한도 변경 전후 확인</h2>
+  <img class="shot" src="../evidence/wsl-permission.png" alt="실제 chmod와 stat 명령: 디렉터리 권한 755 → 700 → 755 변경 확인" style="width:100%;max-height:285px;object-fit:contain;object-position:left center">
+  <div class="row" style="margin-top:22px">
+    <div class="card green col" style="padding:16px 20px"><h3>실제 변경 결과</h3><p class="small"><b>755 → 700 → 755</b><br>700: 소유자만 rwx · 755: 나머지도 r-x</p></div>
+    <div class="card blue col" style="padding:16px 20px"><h3>디렉터리의 rwx</h3><p class="small">r: 이름 목록 · w: 항목 생성·삭제<br>x: 폴더 진입·내부 경로 탐색</p></div>
+  </div>
+  <p class="small sub" style="margin-top:14px">항목 생성·삭제에는 보통 w와 x가 함께 필요. 실제 접근에는 상위 폴더 권한도 영향을 줌.</p>
+</section>
+
 <section class="slide" data-notes="Docker에서 가장 중요한 두 단어는 이미지와 컨테이너입니다. 이미지는 붕어빵 틀이고, 컨테이너는 그 틀로 찍어낸 붕어빵입니다. 틀 하나로 붕어빵을 여러 개 만들 수 있듯, 이미지 하나로 컨테이너를 여러 개 실행할 수 있습니다. 실제로 저는 mission-web:1.0 이미지로 mission-web-container를 실행했습니다.">
   <span class="tag">3. Docker</span>
   <h2>이미지 vs 컨테이너 = 붕어빵 틀 vs 붕어빵 🐟</h2>
@@ -258,7 +272,6 @@ docker build .      <span class="m"># . = 지금 폴더</span></pre>
   </div>
 </section>
 
-<!-- 9. 설치 확인 & hello-world -->
 <section class="slide" data-notes="Docker가 제대로 설치됐는지 먼저 점검했습니다. docker --version으로 버전을, docker version으로 내 명령을 받는 쪽(Client)과 실제 일하는 엔진(Server)이 둘 다 응답하는지 확인했습니다. 그리고 Docker의 '첫 인사'인 hello-world를 실행해서 Hello from Docker! 메시지를 받았습니다.">
   <span class="tag">3. Docker</span>
   <h2>Docker 건강검진 🩺 &amp; 첫 인사 👋</h2>
@@ -289,7 +302,6 @@ correctly.</span></pre>
   </div>
 </section>
 
-<!-- 10. 운영 명령 -->
 <section class="slide" data-notes="Docker를 운영할 때 쓰는 명령들도 실습했습니다. docker images는 갖고 있는 붕어빵 틀 목록, docker ps -a는 만든 붕어빵 전체 목록입니다. 여기서 재미있는 점은 hello-world 컨테이너는 인사만 하고 바로 끝나서 Exited 상태이고, 웹 서버 컨테이너는 계속 손님을 기다려야 해서 Up 상태라는 것입니다. 로그와 자원 사용량은 docker logs, docker stats로 확인했습니다.">
   <span class="tag">3. Docker</span>
   <h2>틀 목록 · 붕어빵 목록 확인하기 📋</h2>
@@ -312,7 +324,22 @@ mission-web:1.0  <span class="y">Up 39 minutes</span>   0.0.0.0:8080-&gt;80/tcp 
   </div>
 </section>
 
-<!-- 11. ubuntu 컨테이너 -->
+<section class="slide" data-notes="보완 실습에서는 Ubuntu 터미널에서도 Docker 연결을 확인했습니다. docker info가 Linux 엔진 29.9.2로 응답했습니다. 이때 nginx 두 개가 실행 중이었고 호스트 8080과 8082 포트를 사용했습니다. Created 컨테이너는 실행 중이 아니며, hello-world 두 개는 종료 코드 0으로 종료돼 있었습니다. 이는 기존 Windows 실습 당시와 다른 시점의 목록입니다.">
+  <span class="tag">3. Docker · WSL 보완 확인</span>
+  <h2>Ubuntu에서도 Linux 엔진 연결 확인</h2>
+  <pre><span class="c">docker --version</span>
+<span class="o">Docker version 29.9.2, build a82e528</span>
+
+<span class="c">docker info --format 'OSType={{.OSType}} ServerVersion={{.ServerVersion}}'</span>
+<span class="o">OSType=linux ServerVersion=29.9.2</span></pre>
+  <div class="row" style="margin-top:24px">
+    <div class="card green col"><h3>Up</h3><p class="small">NGINX 두 개 실행 중<br>호스트 포트: 8080 · 8082</p></div>
+    <div class="card orange col"><h3>Created</h3><p class="small">NGINX 한 개 생성됨<br>현재 실행 중인 상태는 아님</p></div>
+    <div class="card col"><h3>Exited (0)</h3><p class="small">hello-world 두 개<br>종료 코드 0으로 종료</p></div>
+  </div>
+  <p class="small sub" style="margin-top:18px">2026-11-04 보완 시점의 상태. 전체 목록과 명령은 README에 기록.</p>
+</section>
+
 <section class="slide" data-notes="Ubuntu 컨테이너 안에 직접 들어가서 ls, echo 같은 명령을 실행해 봤습니다. 컨테이너 안은 내 컴퓨터 안에 있는 '작은 별도의 컴퓨터' 같습니다. 이때 docker exec로 들어갔다가 exit로 나오면, 손님이 방을 나간 것일 뿐 방(컨테이너)은 그대로 켜져 있습니다. 반면 attach는 원래 주인 프로그램에 직접 붙는 것이라 거기서 종료하면 컨테이너도 꺼질 수 있습니다.">
   <span class="tag">3. Docker</span>
   <h2>컨테이너 속으로 들어가 보기 🚪</h2>
@@ -324,7 +351,44 @@ mission-web:1.0  <span class="y">Up 39 minutes</span>   0.0.0.0:8080-&gt;80/tcp 
   </div>
 </section>
 
-<!-- 12. Dockerfile -->
+<section class="slide" data-notes="보완 실습에서는 e1-ops-20261104150811 Ubuntu 컨테이너에 exec로 Bash를 실행했습니다. echo와 루트 목록 확인 후 exit했지만 docker ps에서 Up 상태를 확인했습니다. 메인 프로세스인 sleep infinity가 계속 실행 중이기 때문입니다. logs에서는 시작 시 메인 프로세스가 출력한 e1-container-started가 나왔습니다. exec에서 출력한 inside-ubuntu는 이 로그에 포함되지 않았습니다. stats는 측정 당시 CPU 0퍼센트, 메모리 3.27MiB, 프로세스 수 1을 보여줬습니다. 수치는 측정 시점마다 달라질 수 있습니다.">
+  <span class="tag">3. Docker · 운영 실습 보완</span>
+  <h2>exec 종료 후에도 컨테이너는 Up</h2>
+  <div class="row">
+    <div class="col">
+      <pre><span class="c">docker exec e1-ops-20261104150811 \
+  bash -c 'echo inside-ubuntu; ls /; exit'</span>
+<span class="o">inside-ubuntu</span>
+<span class="m"># bin, boot, dev 등 루트 목록 출력</span>
+
+<span class="c">docker ps --filter name=e1-ops-20261104150811</span>
+<span class="o">Up Less than a second</span>
+
+<span class="c">docker logs e1-ops-20261104150811</span>
+<span class="o">e1-container-started</span></pre>
+    </div>
+    <div class="col">
+      <div class="card green"><h3>유지되는 이유</h3><p class="small">추가로 실행한 Bash는 종료.<br>메인 프로세스 <code>sleep infinity</code>는 계속 실행 중.</p></div>
+      <div class="card blue" style="margin-top:18px"><h3>stats 실제 측정값</h3><p class="small">CPU: <b>0.00%</b><br>메모리: <b>3.27MiB / 15.25GiB</b><br>PIDS: <b>1</b></p></div>
+      <p class="small sub" style="margin-top:12px">출력 일부 발췌. 전체 명령·결과는 README에 기록.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-notes="같은 실습 컨테이너를 stop으로 중지한 뒤 inspect에서 exited와 Running=false를 확인했습니다. 실제 종료 코드는 137이었으므로 정상 종료 코드 0으로 설명하지 않습니다. 이 로그만으로 원인은 단정하지 않습니다. 중지된 컨테이너는 ps -a 목록에 남아 있었고, rm으로 삭제한 뒤에는 해당 이름으로 조회한 결과가 헤더만 출력됐습니다. exec의 Bash 종료, 컨테이너 중지, 컨테이너 삭제가 서로 다른 동작임을 확인했습니다.">
+  <span class="tag">3. Docker · 운영 실습 보완</span>
+  <h2>중지와 삭제는 다른 동작</h2>
+  <div class="row">
+    <div class="card green col"><h3>1. exec의 Bash 종료</h3><p class="small">메인 프로세스 유지<br>컨테이너: <b>Up</b></p></div>
+    <div class="card orange col"><h3>2. docker stop</h3><p class="small">실행 중지<br><b>Exited (137)</b><br><b>Running=false</b><br>ps -a 목록에는 남음</p></div>
+    <div class="card blue col"><h3>3. docker rm</h3><p class="small">컨테이너 삭제<br>이름으로 조회한 목록:<br><b>헤더만 출력</b></p></div>
+  </div>
+  <pre style="margin-top:24px"><span class="c">docker inspect --format 'Status={{.State.Status}} Running={{.State.Running}}' \
+  e1-ops-20261104150811</span>
+<span class="o">Status=exited Running=false</span></pre>
+  <p class="small sub" style="margin-top:16px">실제 종료 코드 137을 기록. 이 로그만으로 원인은 단정하지 않음.<br>중지·삭제의 전체 명령과 출력은 README에 기록.</p>
+</section>
+
 <section class="slide" data-notes="이제 저만의 이미지를 만들었습니다. 레시피인 Dockerfile은 단 두 줄입니다. 첫 줄 FROM은 '이미 잘 만들어진 웹 서버 NGINX를 바탕으로 시작하겠다', 두 번째 줄 COPY는 '내 웹페이지 파일을 그 안에 넣겠다'는 뜻입니다. 기존 피자 도우를 사서 내 토핑만 올리는 것과 같습니다. 과제의 (A) 방식, 즉 웹 서버 베이스 이미지에 정적 콘텐츠만 교체하는 방법을 선택했습니다. <b>[보충·줄별]</b> FROM nginx:alpine은 바닥부터 안 만들고 이미 완성된 웹 서버 NGINX를 바탕으로 시작한다는 뜻이고, alpine은 아주 가벼운 리눅스 바탕입니다. COPY site/ 는 터미널 명령이 아니라 Dockerfile에 적는 레시피 한 줄로, 내 site 폴더를 NGINX가 보여주는 자리에 복사해 넣는 것입니다. <b>자주 헷갈리는 점:</b> ① alpine은 nginx의 모델이 아니라 가벼운 리눅스 바탕, ② COPY는 돌린다가 아니라 넣어둔다(실제 실행은 docker run 할 때), ③ Dockerfile은 붕어빵 틀이 아니라 레시피이고 build 해야 틀(이미지)이 됩니다.">
   <span class="tag">3. Docker</span>
   <h2>나만의 레시피: Dockerfile 단 2줄 🍕</h2>
@@ -340,7 +404,6 @@ mission-web:1.0  <span class="y">Up 39 minutes</span>   0.0.0.0:8080-&gt;80/tcp 
   </div>
 </section>
 
-<!-- 13. 빌드 & 실행 -->
 <section class="slide" data-notes="레시피로 틀을 만드는 것을 '빌드', 틀로 붕어빵을 찍어 실행하는 것을 '런'이라고 합니다. docker build로 mission-web:1.0 이미지를 만들고, docker run으로 컨테이너를 실행했습니다. 빌드 로그에 CACHED라고 나오는 건, 이미 받아둔 NGINX 도우를 다시 받지 않고 재사용했다는 뜻입니다.">
   <span class="tag">3. Docker</span>
   <h2>빌드(build) → 실행(run) 🏭</h2>
@@ -361,7 +424,15 @@ mission-web:1.0  <span class="y">Up 39 minutes</span>   0.0.0.0:8080-&gt;80/tcp 
   <p class="small sub" style="margin-top:12px"><code>-t</code> 이름표 붙이기 · <code>-d</code> 뒤에서 조용히 실행 · <code>--name</code> 컨테이너 이름 · <code>-p</code> 포트 연결(다음 장!)</p>
 </section>
 
-<!-- 14. 포트 매핑 -->
+<section class="slide" data-notes="실제 WSL 터미널 캡처입니다. 위쪽에서 FROM nginx:alpine과 COPY 명령, Building 5.1초 FINISHED를 확인할 수 있습니다. 아래쪽에서는 파일 복사 단계, 이미지 저장과 e1-proof:1.0 이미지 목록을 확인할 수 있습니다. ID는 82ecee3c870b입니다. 글자를 읽기 쉽게 동일 캡처의 위쪽과 아래쪽을 나눠 보여주며 전체 이미지는 README에 있습니다.">
+  <span class="tag">3. Docker · WSL 빌드 성공</span>
+  <h2>Dockerfile부터 빌드 완료까지 실제 화면</h2>
+  <p class="small sub" style="margin-bottom:8px">캡처 위쪽: FROM · COPY · FINISHED</p>
+  <img class="shot" src="../evidence/wsl-build.png" alt="실제 빌드 캡처 위쪽: Dockerfile 내용과 FINISHED" style="width:100%;height:145px;object-fit:cover;object-position:top">
+  <p class="small sub" style="margin:12px 0 8px">같은 캡처 아래쪽: 이미지 저장 · e1-proof:1.0 목록</p>
+  <img class="shot" src="../evidence/wsl-build.png" alt="실제 빌드 캡처 아래쪽: COPY, 이미지 저장과 e1-proof:1.0 목록" style="width:100%;height:240px;object-fit:cover;object-position:bottom">
+</section>
+
 <section class="slide" data-notes="컨테이너는 자기만의 독립된 공간이라 밖에서 바로 들어갈 수 없습니다. 아파트에 비유하면 컨테이너는 80호에 살고 있는데, 내 컴퓨터 쪽 현관은 8080번입니다. -p 8080:80은 '8080번 현관으로 온 손님을 80호로 안내해라'는 연결 규칙입니다. 왼쪽이 내 PC, 오른쪽이 컨테이너입니다. 그래서 같은 80호를 쓰는 컨테이너 두 개도 8080, 8081로 현관만 다르게 하면 동시에 운영할 수 있습니다. <b>[보충]</b> 포트(-p)는 무조건이 아니라 밖에서 접속해야 할 때만 붙이는 선택 옵션입니다. 웹서버(8080, 8081)처럼 손님을 받아야 하는 컨테이너에만 붙였고, ubuntu-practice나 hello-world처럼 밖에서 접속할 일 없는 컨테이너에는 안 붙였습니다. 포트는 손님 받는 가게 현관문이라고 생각하면 됩니다.">
   <span class="tag">3. Docker</span>
   <h2>포트 매핑: 현관문 번호 연결하기 🚪➡️🏠</h2>
@@ -383,7 +454,6 @@ mission-web:1.0  <span class="y">Up 39 minutes</span>   0.0.0.0:8080-&gt;80/tcp 
   </div>
 </section>
 
-<!-- 15. 접속 증거 -->
 <section class="slide" data-notes="실제로 접속이 되는지 확인했습니다. curl이라는 명령으로 주소에 접속해 보니 HTTP 200 OK, 즉 '정상적으로 잘 받았어요'라는 응답이 왔고, 서버가 nginx라는 것도 확인됐습니다. 브라우저 주소창에 localhost:8081을 넣었을 때도 제 페이지가 보였습니다. 8080과 8081 두 포트 모두 성공했습니다.">
   <span class="tag">3. Docker</span>
   <h2>정말 접속될까? 증거 확인 🔍</h2>
@@ -409,7 +479,32 @@ Content-Type: text/html
   </div>
 </section>
 
-<!-- 16. 바인드 마운트 -->
+<section class="slide" data-notes="앞서 빌드한 e1-proof:1.0 이미지로 컨테이너를 실행한 실제 화면입니다. Up 상태와 호스트 62962에서 컨테이너 80으로의 포트 매핑을 확인했습니다. curl 응답은 200 OK였고 이미지에 복사된 bind mount restored 문구가 나왔습니다. 문구와 달리 이 컨테이너에는 바인드 마운트를 연결하지 않았으며 이미지 자체의 페이지를 확인한 것입니다. 브라우저 확인을 위해 이 시점에는 실행 상태로 남겼습니다.">
+  <span class="tag">3. Docker · WSL 실행·접속 성공</span>
+  <h2>커스텀 이미지 실행 → HTTP 200 OK</h2>
+  <img class="shot" src="../evidence/wsl-web.png" alt="실제 e1-proof:1.0 실행과 Up 상태, 62962 포트 매핑, HTTP 200 응답 및 페이지 본문" style="width:100%;max-height:400px;object-fit:contain;object-position:left center">
+  <p class="small" style="margin-top:14px"><b>127.0.0.1:62962 → 컨테이너 80</b> · 이미지에 복사한 페이지 응답 확인</p>
+  <p class="small sub" style="margin-top:6px">이번 컨테이너는 바인드 마운트 없이 실행. 본문 문구는 기존 웹 원본의 내용.</p>
+</section>
+
+<section class="slide" data-notes="Windows 브라우저에서도 같은 컨테이너의 127.0.0.1:62962 주소로 접속했습니다. 실제 캡처에 주소창과 bind mount restored 문구가 함께 보입니다. 앞서 터미널에서 확인한 포트와 일치하며 이미지에 복사한 페이지가 브라우저에서도 표시됐음을 확인했습니다. 이 문구는 웹 원본 내용이고 이번 컨테이너는 바인드 마운트 없이 실행했습니다.">
+  <span class="tag">3. Docker · 실제 브라우저 접속</span>
+  <h2>주소창과 웹페이지를 함께 확인</h2>
+  <img class="shot" src="../evidence/wsl-browser.png" alt="실제 브라우저에서 127.0.0.1:62962 주소와 bind mount restored 페이지 표시" style="width:100%;max-height:360px;object-fit:contain;object-position:left center">
+  <div class="card green" style="margin-top:24px"><p><b>터미널에서 확인한 포트 = 브라우저 접속 포트</b></p><p class="small">e1-proof:1.0 → 컨테이너 80 → 호스트 62962 → 브라우저</p></div>
+</section>
+
+<section class="slide" data-notes="브라우저 촬영을 마친 뒤 같은 컨테이너 e1-web-shot-153338을 stop으로 중지하고 rm으로 삭제했습니다. 실제 화면에서 두 명령이 각각 해당 이름을 반환하는 것을 확인했습니다. 이미지 삭제 명령은 실행하지 않았으므로 컨테이너 정리와 이미지 삭제를 구분합니다.">
+  <span class="tag">3. Docker · 촬영 후 정리</span>
+  <h2>실습 컨테이너 중지·삭제 확인</h2>
+  <img class="shot" src="../evidence/wsl-web-cleanup.png" alt="실제 docker stop과 docker rm 실행 후 e1-web-shot-153338 이름이 각각 반환된 화면" style="width:100%;max-height:260px;object-fit:contain;object-position:left center">
+  <div class="row" style="margin-top:28px">
+    <div class="card orange col"><h3>docker stop</h3><p>실행 중인 컨테이너 중지</p></div>
+    <div class="card blue col"><h3>docker rm</h3><p>중지된 컨테이너 삭제</p></div>
+  </div>
+  <p class="small sub" style="margin-top:20px">브라우저 촬영 완료 후 정리. 커스텀 이미지 자체를 삭제한 것은 아님.</p>
+</section>
+
 <section class="slide" data-notes="바인드 마운트는 내 컴퓨터의 폴더와 컨테이너 안의 폴더를 '창문'으로 연결하는 것입니다. 창문 밖 내 PC에서 파일을 고치면, 컨테이너 안에서도 바로 보입니다. 실제로 index.html 문구를 works!에서 restored!로 바꾸고 새로고침만 했더니 이미지를 다시 만들지 않아도 바로 반영됐습니다. readonly 옵션으로 컨테이너가 원본을 못 고치게 안전장치도 했습니다. <b>[보충]</b> 앞 슬라이드까지는 파일을 이미지 안에 복사해 넣는 방식이라, 글자 하나만 고쳐도 이미지 재빌드와 컨테이너 재실행을 매번 해야 해서 번거롭습니다. 그래서 바인드 마운트가 등장합니다. 바인드 마운트는 컨테이너 벽에 유리창을 뚫어 내 PC 폴더를 같은 폴더로 공유하는 것이라, PC에서 고치면 즉시 반영됩니다. 구글 드라이브 공유 폴더처럼 실시간 반영되는 느낌은 맞지만 클라우드는 아닙니다. 인터넷 없이 내 컴퓨터 안에서 같은 폴더를 공유하는 것이고, GitHub(클라우드)와 헷갈리지 않게 바인드 마운트는 유리창 또는 공유 폴더로 부르는 게 좋습니다.">
   <span class="tag">4. 데이터 연결</span>
   <h2>바인드 마운트 = 내 방과 연결된 창문 🪟</h2>
@@ -427,7 +522,6 @@ Content-Type: text/html
   </div>
 </section>
 
-<!-- 17. 이미지 재빌드 vs 실행중 컨테이너 -->
 <section class="slide" data-notes="여기서 하나 흥미로운 관찰을 했습니다. site 파일을 고치고 이미지를 다시 빌드했는데도, 이미 실행 중이던 8080 컨테이너는 옛날 문구 그대로였습니다. 붕어빵 틀을 바꿔도 이미 구운 붕어빵 모양은 안 바뀌는 것과 같습니다. 반면 창문으로 연결된 8081은 바로 바뀌었습니다. 이것이 이미지와 컨테이너가 분리되어 있다는 뜻입니다.">
   <span class="tag">4. 데이터 연결</span>
   <h2>실험: 틀을 바꾸면 이미 구운 붕어빵도 바뀔까? 🤔</h2>
@@ -450,7 +544,24 @@ Content-Type: text/html
   <p style="margin-top:24px;text-align:center">💡 <b class="hl">이미지(틀)와 컨테이너(붕어빵)는 서로 분리되어 있다!</b></p>
 </section>
 
-<!-- 18. 볼륨 -->
+<section class="slide" data-notes="WSL 바인드 마운트 보완에서는 변경 전후 모두 403 Forbidden이 나왔습니다. 따라서 이 시도는 변경 반영 성공으로 기록하지 않았습니다. mktemp로 만든 원본 폴더의 접근 권한 부족을 가설로 세웠고, stat에서 원본 디렉터리가 700, 파일은 644임을 확인했고, 별도 확인 컨테이너 로그에서 Permission denied를 확인했습니다. 후속 실행에서 폴더가 755로 변경된 것은 확인했지만 대상 컨테이너가 없어 포트 조회가 실패했습니다. 빈 주소로 curl 요청도 실패해 이 중간 시도는 성공으로 기록하지 않았습니다. 이후 새 컨테이너를 생성해 200 응답과 변경 반영을 확인했습니다. 다음 슬라이드에서 성공 결과를 보여드립니다.">
+  <span class="tag">4. 데이터 연결 · 문제 해결 과정</span>
+  <h2>바인드 마운트에서 403 응답 발생</h2>
+  <div class="row">
+    <div class="card red col"><h3>확인한 현상</h3><p>파일 수정 전·후 모두<br><b>403 Forbidden</b></p><p class="small sub" style="margin-top:12px">http://127.0.0.1:54514<br>이번 시도의 변경 반영은 미확인</p></div>
+    <div class="card orange col"><h3>권한·오류 로그 확인</h3><p class="small">원본 폴더: <b>700</b> · 파일: <b>644</b><br>NGINX: <b>Permission denied</b></p><p class="small" style="margin-top:12px">후속 결과: 폴더 755 변경 확인<br>컨테이너 부재로 HTTP 검증 실패</p></div>
+  </div>
+  <p class="small sub" style="margin-top:24px">2026-11-04 실패 기록. 당시 실패 기록. 후속 재검증에서는 200 응답과 변경 반영 확인.</p>
+</section>
+
+<section class="slide" data-notes="원본 폴더를 755, 파일을 644로 지정하고 새 NGINX 컨테이너에서 재검증했습니다. 같은 주소에서 처음에는 before-change, 호스트 파일 수정 후에는 after-change가 나왔고 둘 다 200 OK였습니다. 두 요청 사이에 재빌드나 재시작은 하지 않았습니다. 캡처에서 curl의 w 옵션으로 실제 응답 상태 코드를 출력했습니다. 최초 403은 폴더 700과 Permission denied 로그를 통해 조사했고 권한 수정 후 새 컨테이너에서 정상 응답을 확인했습니다. 실습 컨테이너는 마지막에 중지·삭제했습니다.">
+  <span class="tag">4. 데이터 연결 · WSL 보완 성공</span>
+  <h2>권한 수정 후 200 OK · 파일 변경 즉시 반영</h2>
+  <img class="shot" src="../evidence/wsl-bind.png" alt="실제 바인드 마운트 명령과 변경 전후 본문 및 두 번의 HTTP 200 응답" style="width:100%;max-height:380px;object-fit:contain;object-position:left center">
+  <p class="small" style="margin-top:16px"><b>같은 컨테이너·주소</b>에서 호스트 파일만 수정 → before-change / after-change, 모두 HTTP 200</p>
+  <p class="small sub" style="margin-top:8px">재빌드·재시작 없이 반영. 실제 접속: http://127.0.0.1:58165 · 확인 후 중지·삭제.</p>
+</section>
+
 <section class="slide" data-notes="컨테이너는 지우면 안에 있던 데이터도 함께 사라집니다. 그래서 중요한 데이터는 Docker가 관리하는 '사물함'인 볼륨에 넣어둡니다. mission-data라는 볼륨을 만들고, 첫 번째 컨테이너에서 saved-in-volume이라는 글을 썼습니다. 그 컨테이너를 완전히 삭제한 뒤, 새 컨테이너에 같은 사물함을 연결했더니 글이 그대로 남아 있었습니다. 이것이 '데이터 영속성'입니다.">
   <span class="tag">4. 데이터 연결</span>
   <h2>볼륨 = 컨테이너가 사라져도 남는 사물함 🗄️</h2>
@@ -470,7 +581,16 @@ Content-Type: text/html
 <span class="y">saved-in-volume</span>                                              <span class="m"># ✅ 데이터 살아있음!</span></pre>
 </section>
 
-<!-- 19. 비교 -->
+<section class="slide" data-notes="앞서 데이터를 저장한 볼륨을 이용해 실제 화면을 캡처했습니다. 첫 컨테이너가 읽기 전용으로 파일을 읽어 saved-in-volume을 출력했습니다. 이 컨테이너를 삭제한 뒤 새 컨테이너에서도 같은 내용을 읽었습니다. 두 번째 컨테이너는 종료 후 자동 삭제했고 마지막 inspect에서 local 드라이버의 볼륨이 남아 있었습니다. 컨테이너의 수명과 볼륨의 수명이 분리돼 있음을 확인했습니다.">
+  <span class="tag">4. 데이터 연결 · WSL 보완 실습</span>
+  <h2>컨테이너를 삭제해도 볼륨 데이터 유지</h2>
+  <img class="shot" src="../evidence/wsl-volume.png" alt="실제 볼륨 영속성 검증: 컨테이너 삭제 전후 saved-in-volume과 볼륨 존재 확인" style="width:100%;max-height:310px;object-fit:contain;object-position:left center">
+  <div class="row" style="margin-top:22px">
+    <div class="card blue col" style="padding:16px 20px"><h3>삭제 전·후 같은 내용</h3><p class="small"><code>saved-in-volume</code> 두 번 출력<br>두 컨테이너 모두 읽기 전용 연결</p></div>
+    <div class="card green col" style="padding:16px 20px"><h3>볼륨은 계속 존재</h3><p class="small">컨테이너 삭제 후에도<br><code>Driver=local</code> 확인</p></div>
+  </div>
+</section>
+
 <section class="slide" data-notes="두 방법을 정리하면, 바인드 마운트는 내 PC 폴더를 직접 연결하는 창문이라 파일을 바로 고치기 좋고, 볼륨은 Docker가 관리하는 사물함이라 컨테이너를 바꿔도 데이터를 안전하게 보관하기 좋습니다. 저는 웹페이지 수정에는 바인드 마운트, 데이터 보관에는 볼륨을 사용했습니다.">
   <span class="tag">4. 데이터 연결</span>
   <h2>창문 🪟 vs 사물함 🗄️ 한눈에 비교</h2>
@@ -485,7 +605,6 @@ Content-Type: text/html
   <p class="small sub" style="margin-top:16px">💾 보너스: Docker 재설치 전 볼륨을 <code>.tar.gz</code>로 백업 → 재설치 후 복원해 <code>saved-in-volume</code> 다시 확인</p>
 </section>
 
-<!-- 20. Git -->
 <section class="slide" data-notes="마지막 도구는 Git입니다. Git은 내 컴퓨터 안에서 작업 기록을 세이브하는 프로그램이고, GitHub는 그 세이브 파일을 인터넷에 올려 다른 사람과 공유하는 사이트입니다. 사용자 이름, 이메일, 기본 브랜치 main을 설정했고, git remote -v로 제 GitHub 저장소와 연결된 것을 확인했습니다. VS Code에서도 GitHub 로그인과 연동을 완료했습니다. 개인정보나 토큰은 문서에 남기지 않았습니다.">
   <span class="tag">5. Git &amp; GitHub</span>
   <h2>Git = 세이브 포인트 💾 · GitHub = 클라우드 ☁️</h2>
@@ -509,7 +628,47 @@ Content-Type: text/html
   </div>
 </section>
 
-<!-- 21. 트러블슈팅 1 -->
+<section class="slide" data-notes="Ubuntu 터미널에서 Git 사용자 이름 장보윤, 이메일, 기본 브랜치 main 설정을 확인했습니다. 이것은 커밋 작성자 정보와 새 저장소 생성 시 기본값을 확인한 것이며, GitHub 로그인이나 현재 저장소의 브랜치 확인과는 다릅니다. Git은 로컬 변경 이력을 관리하는 도구이고 GitHub는 원격 저장소와 협업 기능을 제공하는 서비스입니다. 실제 조회 결과의 이름과 이메일을 포함한 전문은 README에 기록했습니다.">
+  <span class="tag">5. Git &amp; GitHub · 보완 확인</span>
+  <h2>실제 WSL 환경·Git 설정 조회 화면</h2>
+  <div class="row" style="align-items:center">
+    <div class="col" style="flex:1.5">
+      <img class="shot" src="../evidence/wsl-gi.png" alt="실제 WSL 2 환경과 Git 버전·설정·브랜치·원격 주소 조회 결과" style="width:100%;max-height:300px;object-fit:contain;object-position:left center">
+    </div>
+    <div class="col">
+      <h3>실행한 명령</h3>
+      <pre style="font-size:14px">uname -sr
+pwd
+git --version
+git --no-pager config --get-regexp \
+  '^(user\.(name|email)|init\.defaultbranch)$'
+git --no-pager branch --show-current
+git --no-pager remote -v</pre>
+    </div>
+  </div>
+  <div class="row" style="margin-top:16px">
+    <div class="card blue col"><h3>Git</h3><p class="small">로컬 파일 변경 이력·커밋 관리<br>사용자 정보는 <b>커밋 작성자 정보</b></p></div>
+    <div class="card green col"><h3>GitHub</h3><p class="small">원격 저장소 호스팅·코드 공유·협업<br>로그인과 원격 인증은 <b>별도 확인</b></p></div>
+  </div>
+  <p class="small sub" style="margin-top:16px">init.defaultbranch는 새 저장소의 기본값. 현재 브랜치를 뜻하지 않음.</p>
+</section>
+
+<section class="slide" data-notes="WSL 작업 사본에서 Git 버전 2.53.0과 현재 브랜치 main을 확인했습니다. origin의 fetch와 push 주소는 모두 tikita12의 E1-1 저장소를 가리킵니다. 기존 Windows 실습의 SSH 주소와 달리 이 작업 사본은 HTTPS 주소입니다. status의 M 표시는 README와 발표 파일이 수정됐지만 아직 스테이징되지 않았다는 뜻입니다. 이 출력은 원격 주소 설정을 확인한 것이며 현재 인증 성공이나 보완 내용 업로드 완료를 뜻하지 않습니다.">
+  <span class="tag">5. Git &amp; GitHub · WSL 작업 사본</span>
+  <h2>현재 브랜치와 원격 주소 확인</h2>
+  <pre><span class="c">git --version</span>
+<span class="o">git version 2.53.0</span>
+<span class="c">git branch --show-current</span>
+<span class="o">main</span>
+<span class="c">git remote -v</span>
+<span class="o">origin  https://github.com/tikita12/E1-1 (fetch)
+origin  https://github.com/tikita12/E1-1 (push)</span>
+<span class="c">git status --short</span>
+<span class="o"> M README.md
+ M presentation/index.html</span></pre>
+  <p class="small sub" style="margin-top:18px">M: 수정됐지만 아직 스테이징되지 않음. 보완 내용의 커밋·push는 별도 단계.</p>
+</section>
+
 <section class="slide" data-notes="실습 중 가장 고생한 문제입니다. 명령어로는 Docker가 잘 됐는데, Docker Desktop 화면만 계속 꺼졌습니다. 재설치도 해봤지만 같았습니다. 그래서 오류 기록 파일을 직접 열어봤더니, 화면 프로그램이 설치 폴더를 읽을 '출입 권한'이 없다고 적혀 있었습니다. 기존 권한을 백업한 뒤 그 폴더에 읽기·실행 권한을 추가했더니 화면이 정상적으로 열렸습니다. 추측이 아니라 로그로 원인을 찾은 것이 핵심입니다.">
   <span class="tag">6. 문제 해결</span>
   <h2>트러블슈팅 ①: Docker Desktop 창이 안 열려요 😱</h2>
@@ -531,7 +690,6 @@ AppContainer package SID but none for ALL APPLICATION PACKAGES ...</span>
   <p class="small" style="margin-top:12px">💡 비유: 출입증 없는 직원이 사무실에 못 들어가던 것 → <b>출입증(읽기 권한)을 발급</b>해 줌</p>
 </section>
 
-<!-- 22. 트러블슈팅 2 -->
 <section class="slide" data-notes="두 번째는 WSL, 즉 윈도우 안의 리눅스와 관련된 문제였습니다. 처음엔 Ubuntu가 목록에 안 보였는데 기능을 켠 뒤 재시작이 필요했습니다. 그다음엔 PowerShell에선 docker가 되는데 Ubuntu에선 docker 명령을 못 찾았습니다. Docker Desktop 설정에서 WSL 연동이 꺼져 있었고, 켜고 엔진을 재시작해 해결했습니다. 포트가 이미 사용 중일 때 확인하는 방법도 미리 정리해 두었습니다.">
   <span class="tag">6. 문제 해결</span>
   <h2>트러블슈팅 ② · ③: 리눅스(WSL)와 Docker 연결 🔌</h2>
@@ -555,7 +713,6 @@ AppContainer package SID but none for ALL APPLICATION PACKAGES ...</span>
   </div>
 </section>
 
-<!-- 보너스 1. Docker Compose 단일 서비스 -->
 <section class="slide" data-notes="여기서부터는 보너스 과제입니다. 지금까지는 docker run 명령을 매번 길게 입력했는데, Docker Compose를 쓰면 그 설정을 compose.yaml이라는 파일 한 장에 적어두고 docker compose up 한 번으로 실행할 수 있습니다. 마치 매번 말로 주문하는 대신 주문서를 적어두는 것과 같습니다. 저는 compose.yaml에 현재 폴더의 Dockerfile을 빌드하고 8082 포트로 연결하도록 적었습니다. 기존 8080, 8081과 겹치지 않게 8082를 썼습니다.">
   <span class="tag">보너스 심화 🏆</span>
   <h2>보너스 ①: Docker Compose — 긴 명령을 "주문서 한 장"으로 📝</h2>
@@ -578,7 +735,6 @@ AppContainer package SID but none for ALL APPLICATION PACKAGES ...</span>
   </div>
 </section>
 
-<!-- 보너스 2. Compose 멀티 컨테이너 -->
 <section class="slide" data-notes="두 번째 보너스입니다. Compose로는 컨테이너 여러 개를 한 번에 띄우고 서로 통신하게 할 수 있습니다. 저는 웹 서버 web과 통신 확인용 보조 컨테이너 helper를 함께 실행했습니다. 재미있는 점은, helper에서 web에 접속할 때 IP 주소가 아니라 서비스 이름 web만으로 찾을 수 있다는 것입니다. Compose가 두 컨테이너를 같은 네트워크에 넣어주기 때문입니다. 마치 같은 건물 안에서 이름만 부르면 찾아지는 것과 같습니다. 마지막에 down 명령으로 두 컨테이너와 네트워크를 한 번에 정리했습니다.">
   <span class="tag">보너스 심화 🏆</span>
   <h2>보너스 ②: 여러 컨테이너를 한 번에 + 이름으로 통신 🔗</h2>
@@ -595,7 +751,6 @@ AppContainer package SID but none for ALL APPLICATION PACKAGES ...</span>
   </div>
 </section>
 
-<!-- 보너스 3. Compose 환경 변수 -->
 <section class="slide" data-notes="세 번째 보너스는 환경 변수입니다. 환경 변수는 프로그램 바깥에서 설정값을 넣어주는 방법입니다. 저는 APP_MODE라는 값을 practice로 지정하고, NGINX가 응답 헤더에 그 값을 표시하도록 했습니다. curl로 확인하니 X-App-Mode practice 헤더가 실제로 들어 있었습니다. 코드를 고치지 않고도 설정만 바깥에서 바꿀 수 있다는 점이 핵심입니다. 같은 기계에서 다이얼만 바꾸는 것과 비슷합니다. 포트는 8084를 사용했습니다.">
   <span class="tag">보너스 심화 🏆</span>
   <h2>보너스 ③: 환경 변수 — 설정을 바깥에서 "꽂기" 🎛️</h2>
@@ -620,7 +775,6 @@ AppContainer package SID but none for ALL APPLICATION PACKAGES ...</span>
   </div>
 </section>
 
-<!-- 보너스 4. GitHub SSH -->
 <section class="slide" data-notes="마지막 보너스는 GitHub SSH 연결입니다. 지금까지는 GitHub에 올릴 때 비밀번호나 토큰을 썼는데, SSH는 열쇠 한 쌍으로 인증하는 방법입니다. 열쇠는 두 개가 한 쌍인데, 공개 키는 자물쇠처럼 GitHub에 걸어두고 개인 키는 나만 가집니다. 저는 ED25519 방식으로 키를 만들고 공개 키만 GitHub에 등록했습니다. 개인 키는 저장소에 절대 올리지 않았습니다. ssh -T 명령으로 인증을 확인하니 Hi tikita12, 인증 성공 메시지가 나왔습니다.">
   <span class="tag">보너스 심화 🏆</span>
   <h2>보너스 ④: GitHub SSH — 비밀번호 대신 "열쇠 한 쌍" 🔑</h2>
@@ -640,38 +794,16 @@ provide shell access.</span></pre>
   </div>
 </section>
 
-<!-- 23. 평가 결과 -->
-<section class="slide" data-notes="AI 사전평가 결과입니다. 첫 시도에서는 6개 항목만 통과했지만, 부족한 부분을 보완해 두 번째 시도에서 18개 항목 모두 통과했습니다. 특히 실제 명령어와 출력 결과를 함께 기록한 점, 개념을 실습 사례와 연결해 설명한 점, 트러블슈팅을 로그 기반으로 기록한 점이 좋은 평가를 받았습니다. 보완 제안으로는 스크린샷 추가, 네트워크 모드 비교, 리눅스 명령 예시 등이 있었고, 이 부분은 앞으로 더 채워나갈 계획입니다.">
+<section class="slide" data-notes="최종 수행 결과를 정리하겠습니다. WSL에서 기본 파일 조작과 권한 변경을 확인했고, Dockerfile로 이미지를 빌드해 웹 접속을 확인했습니다. 바인드 마운트 변경 반영과 컨테이너 삭제 후 볼륨 데이터 보존도 실제 화면으로 남겼습니다. 특히 403 문제는 권한과 로그를 확인한 뒤 해결했습니다. 평가는 이 자료와 함께 제가 원리를 설명할 수 있는지를 기준으로 받게 됩니다.">
   <span class="tag">7. 평가 &amp; 회고</span>
-  <h2>AI 사전평가 결과 📊</h2>
-  <div class="row" style="align-items:center">
-    <div class="col center" style="display:flex;flex-direction:column;flex:.8">
-      <div class="small sub">시도 1 → 시도 2</div>
-      <div style="display:flex;align-items:baseline;gap:18px">
-        <span style="font-size:56px;font-weight:900;color:#b0b8c9">6</span>
-        <span style="font-size:40px;color:var(--blue)">➜</span>
-        <span class="big-num">18</span><span style="font-size:36px;font-weight:800;color:var(--sub)">/18</span>
-      </div>
-      <span class="pill g" style="margin-top:12px;font-size:20px">전 항목 PASS ✅</span>
-    </div>
-    <div class="col" style="flex:1.3">
-      <div class="card green" style="margin-bottom:14px">
-        <h3>👍 잘한 점</h3>
-        <ul class="clean small">
-          <li class="small">명령어 + <b>실제 출력</b>을 함께 기록 (권한·Docker·포트·볼륨·Git)</li>
-          <li class="small">이미지/컨테이너, 포트, 경로, 권한 개념을 <b>실습 사례와 연결</b></li>
-          <li class="small">트러블슈팅을 <b>로그 → 원인 → 조치</b> 순서로 기록</li>
-        </ul>
-      </div>
-      <div class="card orange">
-        <h3>📈 더 보완할 점</h3>
-        <p class="small">스크린샷 증거 추가 · 네트워크 모드(bridge/host) 비교 · 리눅스용 포트 확인 명령(<code>ss</code>) · 권한 복구 절차</p>
-      </div>
-    </div>
+  <h2>실제 결과로 확인한 개발 작업실</h2>
+  <div class="row">
+    <div class="card green col"><h3>남긴 증거</h3><ul class="clean"><li class="small">파일 조작·권한 변경 실제 화면</li><li class="small">Docker 빌드·실행·브라우저 접속</li><li class="small">바인드 마운트 변경 전·후</li><li class="small">컨테이너 삭제 후 볼륨 데이터</li><li class="small">Git 설정·원격 주소 확인</li></ul></div>
+    <div class="card blue col"><h3>설명할 수 있게 된 원리</h3><p class="small">이미지는 실행의 틀, 컨테이너는 실행 단위<br>호스트 포트와 컨테이너 포트 연결<br>폴더 탐색 권한과 파일 읽기 권한<br>볼륨과 컨테이너의 수명 분리<br>로컬 커밋과 원격 push의 차이</p></div>
   </div>
+  <div class="card orange" style="margin-top:24px"><p class="small"><b>문제 해결 경험:</b> 403 발생 → 폴더 700·Permission denied 확인 → 폴더 755 수정 → 새 컨테이너에서 HTTP 200 확인</p></div>
 </section>
 
-<!-- 24. 마무리 -->
 <section class="slide cover center" data-notes="정리하겠습니다. 이번 미션으로 터미널로 컴퓨터와 대화하고, Docker로 어디서나 같은 환경을 만들고, Git으로 기록을 남기고 공유하는 개발자의 기본 작업실을 완성했습니다. 무엇보다 문제가 생겼을 때 추측하지 않고 로그를 보고 원인을 찾는 습관을 배웠습니다. 들어주셔서 감사합니다. 질문 받겠습니다.">
   <div style="font-size:80px;margin-bottom:10px">🎉</div>
   <h1>작업실 완성!</h1>
